@@ -1,0 +1,129 @@
+import {
+  View,
+  TextInput,
+  ActivityIndicator,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Alert,
+  Text,
+} from "react-native";
+import React, { useState } from "react";
+import { useAuth } from "../context/auth";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { login, createUser, initializing } = useAuth();
+
+  const handleLogin = async () => {
+    setLoading(true);
+
+    const { success, error } = await login(email, password);
+
+    if (success) {
+      Alert.alert("Success", "You have successfully logged in!");
+    }
+
+    if (error) {
+      Alert.alert("Error", error);
+    }
+
+    setLoading(false);
+  };
+
+  const handleCreateUser = async () => {
+    setLoading(true);
+
+    const { success, error } = await createUser(email, password);
+
+    if (success) {
+      Alert.alert("Success", "You have successfully created an account!");
+    }
+
+    if (error) {
+      Alert.alert("Error", error);
+    }
+
+    setLoading(false);
+  };
+
+  if (initializing) {
+    return null;
+  }
+
+  return (
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <Text style={styles.title}>Login Page</Text>
+
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
+        autoCapitalize="none"
+        placeholderTextColor="#fff"
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+        autoCapitalize="none"
+        secureTextEntry
+        placeholderTextColor="#fff"
+        style={styles.input}
+      />
+
+      <View>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleCreateUser} style={styles.button}>
+          <Text style={styles.buttonText}>Create Account</Text>
+        </TouchableOpacity>
+      </View>
+
+      {loading && <ActivityIndicator size="large" color="#f03" />}
+    </KeyboardAvoidingView>
+  );
+};
+
+export default Login;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 24,
+    backgroundColor: "#000",
+  },
+  title: {
+    color: "#fff",
+    fontSize: 32,
+    textAlign: "center",
+    marginBottom: 32,
+  },
+  input: {
+    borderWidth: 2,
+    borderColor: "#4610b3",
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    marginTop: 16,
+    color: "#fff",
+  },
+  button: {
+    backgroundColor: "#4610b3",
+    color: "#fff",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 16,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
