@@ -7,3 +7,7 @@ export const saveSecureValue = async (key: string, value: string) => {
 export const readSecureValue = async (key: string) => {
   return await SecureStore.getItemAsync(key);
 };
+
+export const deleteSecureValue = async (key: string) => {
+  await SecureStore.deleteItemAsync(key);
+};

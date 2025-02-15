@@ -12,6 +12,7 @@ export type AuthContext = {
   initializing: boolean;
   setUser: (user: User) => void;
   login: (email: string, password: string) => Promise<FirebaseResponse>;
+  logout: () => Promise<FirebaseResponse>;
   createUser: (email: string, password: string) => Promise<FirebaseResponse>;
 };
 

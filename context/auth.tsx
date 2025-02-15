@@ -1,25 +1,27 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import type { AuthContext, AuthProviderProps, User } from "./types";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   getIdToken,
+  signOut,
 } from "@react-native-firebase/auth";
-import { doc, setDoc, getFirestore } from "@react-native-firebase/firestore";
-import { saveSecureValue } from "../utils/secureStore";
+import { doc, setDoc } from "@react-native-firebase/firestore";
+import { deleteSecureValue, saveSecureValue } from "../utils/secureStore";
+import { firebaseAuth, firebaseFirestore } from "../utils/firebase";
 const AuthContext = createContext<AuthContext | null>(null);
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(null);
   const [initializing, setInitializing] = useState(true);
 
-  const auth = getAuth();
-  const firestore = getFirestore();
-
   const login = async (email: string, password: string) => {
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        password
+      );
 
       const token = await getIdToken(response.user);
 
@@ -33,12 +35,12 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const createUser = async (email: string, password: string) => {
     try {
       const response = await createUserWithEmailAndPassword(
-        auth,
+        firebaseAuth,
         email,
         password
       );
 
-      await setDoc(doc(firestore, "users", response.user.uid), {
+      await setDoc(doc(firebaseFirestore, "users", response.user.uid), {
         email: response.user.email,
         uid: response.user.uid,
       });
@@ -49,8 +51,18 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await signOut(firebaseAuth);
+      await deleteSecureValue("token");
+      return { success: true };
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  };
+
   useEffect(() => {
-    const subscriber = auth.onAuthStateChanged((user) => {
+    const subscriber = firebaseAuth.onAuthStateChanged((user) => {
       setUser(user);
       if (initializing) setInitializing(false);
     });
@@ -60,7 +72,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, login, createUser, initializing }}
+      value={{ user, setUser, login, logout, createUser, initializing }}
     >
       {children}
     </AuthContext.Provider>
