@@ -1,11 +1,11 @@
-import { User as FirebaseAuthUser } from "firebase/auth";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 type FirebaseResponse = {
   success: boolean;
   error?: string;
 };
 
-export type User = FirebaseAuthUser | null;
+export type User = FirebaseAuthTypes.User | null;
 
 export type AuthContext = {
   user: User;

@@ -1,24 +1,23 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import type { AuthContext, AuthProviderProps, User } from "./types";
 import {
+  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-} from "@firebase/auth";
-import { firebaseAuth, firebaseFirestore } from "../config/firebase";
-import { doc, setDoc } from "firebase/firestore";
-import { useRouter } from "expo-router";
-
+} from "@react-native-firebase/auth";
+import { doc, setDoc, getFirestore } from "@react-native-firebase/firestore";
 const AuthContext = createContext<AuthContext | null>(null);
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(null);
   const [initializing, setInitializing] = useState(true);
 
-  const router = useRouter();
+  const auth = getAuth();
+  const firestore = getFirestore();
 
   const login = async (email: string, password: string) => {
     try {
-      await signInWithEmailAndPassword(firebaseAuth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
 
       return { success: true };
     } catch (error: any) {
@@ -29,12 +28,12 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const createUser = async (email: string, password: string) => {
     try {
       const response = await createUserWithEmailAndPassword(
-        firebaseAuth,
+        auth,
         email,
         password
       );
 
-      await setDoc(doc(firebaseFirestore, "users", response.user.uid), {
+      await setDoc(doc(firestore, "users", response.user.uid), {
         email: response.user.email,
         uid: response.user.uid,
       });
@@ -46,21 +45,13 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const subscriber = firebaseAuth.onAuthStateChanged((user) => {
+    const subscriber = auth.onAuthStateChanged((user) => {
       setUser(user);
       if (initializing) setInitializing(false);
     });
 
     return subscriber;
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      router.replace("/home");
-    } else {
-      router.replace("/");
-    }
-  }, [user]);
 
   return (
     <AuthContext.Provider

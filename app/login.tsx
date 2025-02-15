@@ -10,13 +10,14 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "../context/auth";
+import { router } from "expo-router";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("pedro@email.com");
+  const [password, setPassword] = useState("senha123");
   const [loading, setLoading] = useState(false);
 
-  const { login, createUser, initializing } = useAuth();
+  const { login, createUser } = useAuth();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -25,6 +26,7 @@ const Login = () => {
 
     if (success) {
       Alert.alert("Success", "You have successfully logged in!");
+      router.replace("/");
     }
 
     if (error) {
@@ -49,10 +51,6 @@ const Login = () => {
 
     setLoading(false);
   };
-
-  if (initializing) {
-    return null;
-  }
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -109,7 +107,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#4610b3",
     borderRadius: 8,
-    paddingHorizontal: 16,
+    padding: 16,
     marginTop: 16,
     color: "#fff",
   },

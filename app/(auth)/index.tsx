@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { signOut } from "@firebase/auth";
-import { firebaseAuth } from "../../config/firebase";
+import { getAuth, signOut } from "@react-native-firebase/auth";
 
 const Home = () => {
+  const auth = getAuth();
+
   const handleLogout = async () => {
-    await signOut(firebaseAuth);
+    await signOut(auth);
   };
 
   return (

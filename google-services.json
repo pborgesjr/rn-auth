@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "82535043101",
+    "project_id": "rn-auth-4c853",
+    "storage_bucket": "rn-auth-4c853.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82535043101:android:96466f9d5036b5b69036f4",
+        "android_client_info": {
+          "package_name": "com.pedroborges.rn_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82535043101-ujqjmkq98bolvtmsrnuuhnus2rh6tse9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsZSSIqB1Zr1An1TctFGHZdvgffqmEz_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82535043101-ujqjmkq98bolvtmsrnuuhnus2rh6tse9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "82535043101-eagoki5cl080ci51v2l385a1id1cisol.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pedroborges.rn-auth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

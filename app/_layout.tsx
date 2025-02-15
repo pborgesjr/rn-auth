@@ -1,14 +1,10 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import { AuthProvider } from "../context/auth";
-
-const StackLayout = () => {
-  return <Stack screenOptions={{ headerShown: false }} />;
-};
 
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <StackLayout />
+      <Slot />
     </AuthProvider>
   );
 }
