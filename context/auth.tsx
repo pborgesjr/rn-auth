@@ -4,8 +4,10 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  getIdToken,
 } from "@react-native-firebase/auth";
 import { doc, setDoc, getFirestore } from "@react-native-firebase/firestore";
+import { saveSecureValue } from "../utils/secureStore";
 const AuthContext = createContext<AuthContext | null>(null);
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
@@ -17,8 +19,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(auth, email, password);
 
+      const token = await getIdToken(response.user);
+
+      await saveSecureValue("token", token);
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };
