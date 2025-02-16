@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   TextInput,
@@ -8,9 +9,11 @@ import {
   Alert,
   Text,
 } from "react-native";
-import React, { useState } from "react";
-import { useAuth } from "../context/auth";
 import { router } from "expo-router";
+import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
+
+import { useAuth } from "../context/auth";
+import { loginGoogle } from "../utils/google";
 
 const Login = () => {
   const [email, setEmail] = useState("pedro@email.com");
@@ -27,6 +30,22 @@ const Login = () => {
     if (success) {
       Alert.alert("Success", "You have successfully logged in!");
       router.replace("/");
+    }
+
+    if (error) {
+      Alert.alert("Error", error);
+    }
+
+    setLoading(false);
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+
+    const { success, error } = await loginGoogle();
+
+    if (success) {
+      Alert.alert("Success", "You have successfully logged in with Google!");
     }
 
     if (error) {
@@ -78,6 +97,7 @@ const Login = () => {
         <TouchableOpacity onPress={handleLogin} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
+        <GoogleSigninButton onPress={handleGoogleLogin} style={styles.google} />
         <TouchableOpacity onPress={handleCreateUser} style={styles.button}>
           <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
@@ -118,6 +138,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 16,
+  },
+  google: {
+    marginTop: 16,
+    width: "100%",
   },
   buttonText: {
     color: "#fff",

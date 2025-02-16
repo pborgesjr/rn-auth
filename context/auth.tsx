@@ -17,15 +17,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await signInWithEmailAndPassword(
-        firebaseAuth,
-        email,
-        password
-      );
+      await signInWithEmailAndPassword(firebaseAuth, email, password);
 
-      const token = await getIdToken(response.user);
-
-      await saveSecureValue("token", token);
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };
@@ -62,9 +55,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const subscriber = firebaseAuth.onAuthStateChanged((user) => {
+    const subscriber = firebaseAuth.onAuthStateChanged(async (user) => {
       setUser(user);
       if (initializing) setInitializing(false);
+
+      if (user) {
+        const token = await getIdToken(user);
+
+        await saveSecureValue("token", token);
+      }
     });
 
     return subscriber;
