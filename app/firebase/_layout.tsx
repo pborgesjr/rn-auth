@@ -1,10 +1,13 @@
 import { Link, Stack } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 
-import { useAuth } from "../../context/auth";
+import {
+  FirebaseAuthProvider,
+  useFirebaseAuth,
+} from "../../context/firebaseAuth";
 
-export default function AuthenticatedLayout() {
-  const { user, initializing } = useAuth();
+const FirebaseWrapper = () => {
+  const { initializing } = useFirebaseAuth();
 
   if (initializing) {
     return null;
@@ -22,4 +25,14 @@ export default function AuthenticatedLayout() {
       }}
     />
   );
-}
+};
+
+const FirebaseLayout = () => {
+  return (
+    <FirebaseAuthProvider>
+      <FirebaseWrapper />
+    </FirebaseAuthProvider>
+  );
+};
+
+export default FirebaseLayout;

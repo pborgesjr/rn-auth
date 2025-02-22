@@ -1,5 +1,5 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import type { AuthContext, AuthProviderProps, User } from "./types";
+import type { FirebaseAuthContext, AuthProviderProps, User } from "./types";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -10,9 +10,9 @@ import { doc, setDoc } from "@react-native-firebase/firestore";
 import { firebaseAuth, firebaseFirestore } from "../utils/firebase";
 import { deleteSecureValue, saveSecureValue } from "../utils/secureStore";
 
-const AuthContext = createContext<AuthContext | null>(null);
+const FirebaseAuthContext = createContext<FirebaseAuthContext | null>(null);
 
-export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+export const FirebaseAuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(null);
   const [initializing, setInitializing] = useState(true);
 
@@ -71,19 +71,21 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider
+    <FirebaseAuthContext.Provider
       value={{ user, setUser, login, logout, createUser, initializing }}
     >
       {children}
-    </AuthContext.Provider>
+    </FirebaseAuthContext.Provider>
   );
 };
 
-export const useAuth = (): AuthContext => {
-  const context = useContext(AuthContext);
+export const useFirebaseAuth = (): FirebaseAuthContext => {
+  const context = useContext(FirebaseAuthContext);
 
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error(
+      "useFirebaseAuth must be used within an FirebaseAuthProvider"
+    );
   }
 
   return context;

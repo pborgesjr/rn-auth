@@ -1,5 +1,9 @@
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
+export type AuthProviderProps = {
+  children: React.ReactNode;
+};
+
 type FirebaseResponse = {
   success: boolean;
   error?: string;
@@ -7,7 +11,7 @@ type FirebaseResponse = {
 
 export type User = FirebaseAuthTypes.User | null;
 
-export type AuthContext = {
+export type FirebaseAuthContext = {
   user: User;
   initializing: boolean;
   setUser: (user: User) => void;
@@ -16,6 +20,7 @@ export type AuthContext = {
   createUser: (email: string, password: string) => Promise<FirebaseResponse>;
 };
 
-export type AuthProviderProps = {
-  children: React.ReactNode;
+export type JWTAuthContext = {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 };

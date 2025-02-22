@@ -12,6 +12,9 @@ const HomeScreen = () => {
       <Link href="/clerk" style={styles.button}>
         <Text style={styles.text}>Go to Clerk login</Text>
       </Link>
+      <Link href="/jwt" style={styles.button}>
+        <Text style={styles.text}>Go to JWT Login</Text>
+      </Link>
     </SafeAreaView>
   );
 };

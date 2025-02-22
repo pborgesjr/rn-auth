@@ -13,14 +13,14 @@ import { router } from "expo-router";
 import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 
 import { loginGoogle } from "../../utils/google";
-import { useAuth } from "../../context/auth";
+import { useFirebaseAuth } from "../../context/firebaseAuth";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("pedro@email.com");
   const [password, setPassword] = useState("senha123");
   const [loading, setLoading] = useState(false);
 
-  const { login, createUser } = useAuth();
+  const { login, createUser } = useFirebaseAuth();
 
   const handleLogin = async () => {
     setLoading(true);

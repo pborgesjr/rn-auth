@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useAuth } from "../../context/auth";
+import { useFirebaseAuth } from "../../context/firebaseAuth";
 
 const HomeScreen = () => {
-  const { logout } = useAuth();
+  const { logout } = useFirebaseAuth();
 
   return (
     <View>
