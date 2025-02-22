@@ -9,6 +9,9 @@ const HomeScreen = () => {
       <Link href="/firebase" style={styles.button}>
         <Text style={styles.text}>Go to Firebase login</Text>
       </Link>
+      <Link href="/clerk" style={styles.button}>
+        <Text style={styles.text}>Go to Clerk login</Text>
+      </Link>
     </SafeAreaView>
   );
 };
